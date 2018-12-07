@@ -24,7 +24,7 @@ def find_template(repo_dir, context):
 
     delim_start = '{{'
     delim_end = '}}'
-    environment = context.get('_environment')
+    environment = context['cookiecutter'].get('_environment')
     if environment:
         if 'variable_start_string' in environment:
             delim_start = environment['variable_start_string']
