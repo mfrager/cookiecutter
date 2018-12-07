@@ -212,9 +212,19 @@ def render_and_create_dir(dirname, context, output_dir, environment,
     return dir_to_create, not output_dir_exists
 
 
-def ensure_dir_is_templated(dirname):
+def ensure_dir_is_templated(dirname, context):
     """Ensure that dirname is a templated directory name."""
-    if '{{' in dirname and '}}' in dirname:
+
+    delim_start = '{{'
+    delim_end = '}}'
+    environment = context['cookiecutter'].get('_environment')
+    if environment:
+        if 'variable_start_string' in environment:
+            delim_start = environment['variable_start_string']
+        if 'variable_end_string' in environment:
+            delim_end = environment['variable_end_string']
+
+    if delim_start in dirname and delim_end in dirname:
         return True
     else:
         raise NonTemplatedInputDirException
@@ -259,7 +269,7 @@ def generate_files(repo_dir, context=None, output_dir='.',
     context = context or OrderedDict([])
 
     unrendered_dir = os.path.split(template_dir)[1]
-    ensure_dir_is_templated(unrendered_dir)
+    ensure_dir_is_templated(unrendered_dir, context)
     env = StrictEnvironment(
         context=context,
         keep_trailing_newline=True,
