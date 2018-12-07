@@ -254,7 +254,7 @@ def generate_files(repo_dir, context=None, output_dir='.',
     :param overwrite_if_exists: Overwrite the contents of the output directory
         if it exists.
     """
-    template_dir = find_template(repo_dir)
+    template_dir = find_template(repo_dir, context)
     logger.debug('Generating project from {}...'.format(template_dir))
     context = context or OrderedDict([])
 
